@@ -1,5 +1,23 @@
 # The Go Programming Language
+[toc]
 
+## Introduction
+## Setup
+### Installing Go Runtime
+### Installing VS IDE
+## Goodbye, Cruel world
+1. The following is a very basic, "Hello, World!" style application, with explanatory notes:
+    ```go
+    package main
+
+    import "fmt"
+
+    func main() {
+        fmt.Println("Goodbye, Cruel World!")
+    }
+    ```
+2. 
+### Frequently Used CLI Commands
 ## Quick Notes
 
 1.  Go CLI commands:
@@ -124,7 +142,7 @@
     c := 3.14
     d := true
     ```
-    In the above examples, the *shorthand* method is used to create the variables and assign a value to them. The *type* is automatically inferred.
+    In the above examples, the *shorthand* method is used to create the variables and assign a value to them. The *type* is automatically inferred. **The colon is not necessary if we are assigning a value to a pre-existing variable.
     
     b. using the *var* keyword, which assigns a **zero value** to the variable.  Every type has its own *zero value*.  For example, an int would initialize to 0, a string would initialize to "", boolean is *false*.
     ```go
@@ -138,17 +156,25 @@
     
 2.  **Initialization** of a variable is when it is declared and assigned in one statement.
 
-3.  Types in Go:
+3.  Basic types in Go:
 
-    a.  int
+    a. int
     
-    b.  string
+    b. string
     
-    c.  float64
+    c. float64
     
-    d.  bool
+    d. bool
     
-    e.  
+    e. array
+    
+    f. map
+    
+4. In addition to the standard types, we can create custom types in Go. For example:
+    ```go
+    type deck []string
+    ```
+    The above statement would create an array of strings for a type "deck", and we can add functions with "deck" as a **receiver**, meaning that the functions are like *methods* acting on an instance of the deck "class". 
     
 4.  **Blank Identifier**:   In Go, every declared variable must be used; if not, it will throw an error. In addition, a variable name can be an underscore, "_", in which case a value can be assigned to it, but cannot be read from it. This is commonly used where a function has multiple return values but we don't really care about one or more of the values. For example, in development we might not care about the error return of an http query, so we can just write something such as:
     ```go
@@ -395,6 +421,26 @@
 
 3.  Note that functions are typed by their return value. So, a function that has an *int* return value has a type of *func int*.
 
+4. A **receiver** is analogous to the assignment of a function to the instances of a class. For example, if we have a type of *deck*, that is an array of strings (representing a deck of playing cards), we could have a function, *print()*, that can be called on to print all the cards contained in the deck.  For example:
+    ```go
+    // deck.go
+    package main
+
+    import "fmt"
+    // create a new type of "deck, a slice of strings
+    type deck []string 
+
+    func (d deck) print() {
+        for ind, val := range d {
+            fmt.Println(ind, val)
+        }
+    }
+    ```
+    In the above code, we first create a new type, *deck*, which is analogous to a *class*. We then use the receiver to make the *print* function available to any item of type deck (analogous to an instance of the class). Note that the "d" used for a deck instance could be any variable.
+    
+    *By convention*, we use a one or two letter abbreviation of the type as the variable name; for example, the "d" in the above example.
+ 
+
 4.  In Go, functions can be passed in as arguments, or returned from other functions, *i.e.*, Go has **callback functions**.
 
 4.  Always keep in mind the difference between a **function declaration** and a **function expression**. One big difference is that *a function cannot be declared within another function.* In such a case, we **must** use an anonymous function, which we can assign to a variable.
@@ -533,6 +579,7 @@
     func greet(firstName string, lastName int) string {
 	    return fmt.Sprint(firstName, lastName)
     }
+    ```
 
 #### Loop Syntax
 
@@ -690,6 +737,7 @@ Note that Go does not evaluate "truthy" and "falsey" statements as in JavaScript
 2.  
 
 ## Data Structures in Go
+1. Go has two data structures that would fit into what we woud normally think of as an **array**; *i.e.*, a list of elements. The word **array** is used for a more limited structure that is of a fixed and stated length. The word **slice** is a dynamically sized array. In either case, the elements of the array must be of a **single, pre-declared type**.
 
 ### Arrays
 
@@ -718,7 +766,7 @@ Note that Go does not evaluate "truthy" and "falsey" statements as in JavaScript
     x[0] = "Now"
     x[1] = "is"
     Println(x[0])           //will print "Now"
-
+    ```
 ### Slices
 
 1.  A **slice** is, basically, a list of items.  It is a descriptor for a contiguous section of an underlying array.
@@ -781,13 +829,30 @@ Note that Go does not evaluate "truthy" and "falsey" statements as in JavaScript
     
 10. If the slice exceeds the capacity of the underlying array, the computer creates a new array of twice the size, transfers the elements to the new array, tosses the old array, and updates the reference of the slice to the new array.
 
-11. To add an element to a slice, we use the function **append**, which takes two+ parameters: the name of the slice and the values to add.  It gets added to the end of the slice, and returns the slice, as increased.
+11. To add an element to a slice, we use the function **append**, which takes two+ parameters: the name of the slice and the values to add.  The *append()* function returns a reference to a **new slice**, with the items appended. Of course, if we wish, we can assign the reference to the new slice to the variable that was holding our previous slice.
     ```go
     mySlice = append(mySlice, 50, 1)  //add 50 and 1 to the end of the slice
     
     mySlice = append(mySlice, otherSlice...)  //appends the elements of the 2nd slice.
     ```
     Notice that the second example above would not work without the ... appended because of the type differences.
+    
+12. To **iterate** over a slice, use the following syntax:
+    ```go
+    func main() {
+        cards := []string{"Ace of Diamonds", newCard()}
+        cards = append(cards, "Six of Spades")
+
+        for ind, val := range cards {
+            fmt.Println(ind, val)
+        }
+    }
+    ```
+    Note the two variables given to the *for* iterator: **ind** and **val**. These can be any name, and represent the **index** of the entry and the value held at that index of the slice. **range** is a keyword used when we want to iterate over every record contained in a slice of elements.
+    
+    Note also that we use the := assigment operator because every time we go through the for loop, we are moving one item further into the slice and assigning new values to *ind* and *val*.
+
+13. One problem that can arise is if we do not wish to use the index value. If we do not use it, we may get a compilation error for having declared an unused variable. If we don't declare it, that will not work, because the first variable declared will be the index, so it will be the value that gets left out. However, we can deal with this by using a **blank Identifier**. This is a variable notated with an underscore, "\_", in which case *a value can be assigned to it, but cannot be read from it*.
 
 12. To remove items from a slice, use *append* and leave out unwanted items:
     ```go
