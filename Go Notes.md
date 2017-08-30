@@ -17,6 +17,17 @@
     }
     ```
 2. 
+
+3. We **import** packages into a file to make its code available to the package. To import multiple packages, we use parens notation, as follows:
+    ```go
+    import (
+        "fmt"
+        "strings"
+    )
+    ```
+    **Note**: there is no need for a comma or other punctuation between the entries.
+    
+
 ### Frequently Used CLI Commands
 ## Quick Notes
 
@@ -592,6 +603,11 @@
     b. data ([]byte): the slice of bytes that we wish to write to the file,
     
     c. perm, or permissions (os.FileMode): the permissions assigned to the created file, if it is not pre-existing.
+
+2. A slice of bytes is pretty much the same thing as a string. To convert from a string to a slice of bytes, we can use Go's ability to convert type. This is done by listing the type that we wish our value to be converted into, followed by the value in parentheses, as follows:
+    ```go
+    []byte("Goodbye, Cruel World!")
+    ```
     
 
 #### Loop Syntax
