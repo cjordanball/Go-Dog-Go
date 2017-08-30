@@ -1,12 +1,24 @@
 package main
 
-func main() {
-	cards := deck{"Ace of Diamonds", newCard()}
-	cards = append(cards, "Six of Spades")
+import "fmt"
 
-	cards.print()
+// func main() {
+// 	cards :=  newDeck()
+
+// 	hand, remainingDeck := deal(cards, 5)
+
+// 	hand.print()
+
+// 	remainingDeck.print()
+// }
+func main() {
+
+	title, pages := getBookInfo()
+
+	fmt.Println(title);
+	fmt.Println(pages);
 }
 
-func newCard() string {
-	return "Ace of Clubs"
+func getBookInfo() (string, pages) {
+	return "War and Peace", 1000
 }
