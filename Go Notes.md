@@ -17,6 +17,17 @@
     }
     ```
 2. 
+
+3. We **import** packages into a file to make its code available to the package. To import multiple packages, we use parens notation, as follows:
+    ```go
+    import (
+        "fmt"
+        "strings"
+    )
+    ```
+    **Note**: there is no need for a comma or other punctuation between the entries.
+    
+
 ### Frequently Used CLI Commands
 ## Quick Notes
 
@@ -580,6 +591,24 @@
 	    return fmt.Sprint(firstName, lastName)
     }
     ```
+    
+### ioutil
+1. The package **ioutil** contains a number of frequently used functions for writing data to a file, reading data from a file, and similar tasks.
+
+#### func WriteFile
+1. WriteFile is pretty much true to its name. It takes the following parameters:
+
+    a. filename (string): the name of the file to which we want to write,
+    
+    b. data ([]byte): the slice of bytes that we wish to write to the file,
+    
+    c. perm, or permissions (os.FileMode): the permissions assigned to the created file, if it is not pre-existing.
+
+2. A slice of bytes is pretty much the same thing as a string. To convert from a string to a slice of bytes, we can use Go's ability to convert type. This is done by listing the type that we wish our value to be converted into, followed by the value in parentheses, as follows:
+    ```go
+    []byte("Goodbye, Cruel World!")
+    ```
+    
 
 #### Loop Syntax
 
@@ -769,7 +798,9 @@ Note that Go does not evaluate "truthy" and "falsey" statements as in JavaScript
     ```
 ### Slices
 
-1.  A **slice** is, basically, a list of items.  It is a descriptor for a contiguous section of an underlying array.
+1.  A **slice** is, basically, a list of items. It is a descriptor for a contiguous section of an underlying array.
+
+2. A slice is **zero-indexed** in Go.
 
 2.  The value of an unitialized slice is **nil**.
 
@@ -798,12 +829,16 @@ Note that Go does not evaluate "truthy" and "falsey" statements as in JavaScript
     ```go
     var student []string
     ```
-8.  A slice can be made from another slice (or array), with the following notation:
+8.  A slice can consist of a range of values contained in a pre-existing array or slice. The syntax for this is as follows:
     ```go
     myArray := [10]int{1, 2, 3, 4, 5, 6, 7, 8, 33, 214}
     mySlice := myArray[5:8]
     fmt.Printf("%T\n", mySlice)         //will print [6, 7, 8]
     ```
+    **Note**: The first number in the brackets is the index of the first item contained in the new slice. The second number is the index of the item immediately following the last item in the new slice.
+    
+    **Note**: We can leave off the number on **either side of the colon**, to instruct Go to begin at the start, or end at the ending, respectively, of the original array/slice.
+    
 9.  Example of a slice of slices:
     ```go
     func main() {
